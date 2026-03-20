@@ -1,4 +1,28 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useAuthStore } from "../store/authStore";
+
 export default function LoginPage() {
+  const login = useAuthStore((state) => state.login);
+  const loading = useAuthStore((state) => state.loading);
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await login(email, password);
+      console.log("Hello")
+      toast.success("Login successful!");
+      navigate("/dashboard");
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
   return (
     <div className="min-h-screen flex">
       <div className="hidden md:flex w-1/2 bg-linear-to-br from-white/10 to-emerald-700 text-white flex-col justify-center items-center px-12">
@@ -21,14 +45,16 @@ export default function LoginPage() {
             Sign in to your account
           </h2>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleOnSubmit}>
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Email
               </label>
               <input
                 type="email"
-                placeholder="admin@healthcare.com"
+                placeholder="test@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 border border-emerald-700 rounded-lg"
                 required
               />
@@ -41,6 +67,8 @@ export default function LoginPage() {
               <input
                 type="password"
                 placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 border border-emerald-700 rounded-lg"
                 required
               />
@@ -48,9 +76,10 @@ export default function LoginPage() {
 
             <button
               type="submit"
+              disabled={loading}
               className="w-full cursor-pointer bg-emerald-500 hover:bg-emerald-700 text-white py-3 rounded-lg font-medium transition duration-200"
             >
-              Sign In
+              {loading ? "Logging In...." : "Login"}
             </button>
           </form>
         </div>
