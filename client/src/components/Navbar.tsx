@@ -1,11 +1,21 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import { useAuthStore } from "../store/authStore";
 import toast from "react-hot-toast";
+import { User2Icon } from "lucide-react";
+import LogoutModal from "./LogoutModal";
 
 export default function Navbar() {
   const logout = useAuthStore((state) => state.logout);
 
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+
   const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    setIsLogoutOpen(true);
+  };
 
   const handleLogout = () => {
     logout();
@@ -41,13 +51,24 @@ export default function Navbar() {
             Favourite
           </Link>
         </li>
-        <li>
+        <li className="relative pt-2">
+          <span className="absolute -top-1 left-1/2 z-10 -translate-x-1/2 rounded-md bg-emerald-600 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
+            Buyer
+          </span>
+
           <button
-            onClick={handleLogout}
-            className="hover:text-emerald-200 transition-colors"
+            onClick={handleLogoutClick}
+            className="relative flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-emerald-50 text-emerald-600 transition-all hover:border-emerald-500 hover:bg-white hover:text-emerald-500 active:scale-95 border border-transparent shadow-sm"
+            title="Logout"
           >
-            Logout
+            <User2Icon size={20} />
           </button>
+
+          <LogoutModal
+            isOpen={isLogoutOpen}
+            onClose={() => setIsLogoutOpen(false)}
+            onConfirm={handleLogout}
+          />
         </li>
       </ul>
     </nav>
