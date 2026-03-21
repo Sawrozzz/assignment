@@ -15,7 +15,14 @@ export default function Navbar() {
 
   return (
     <nav className=" sticky top-0 z-50 bg-emerald-500 text-white px-12 py-4 shadow-md flex justify-between items-center">
-      <div className="text-2xl font-bold">BYSAWROZ</div>
+      <div
+        onClick={() => {
+          navigate("/dashboard");
+        }}
+        className="text-2xl font-bold"
+      >
+        BYSAWROZ
+      </div>
 
       <ul className="flex space-x-6">
         <li>

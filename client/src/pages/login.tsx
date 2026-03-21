@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -11,13 +12,12 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleOnSubmit = async (e) => {
+  const handleOnSubmit = async (e:any) => {
     e.preventDefault();
 
     try {
       await login(email, password);
-      console.log("Hello")
-      toast.success("Login successful!");
+        toast.success("Login successful!");
       navigate("/dashboard");
     } catch (err) {
       toast.error(err.message);

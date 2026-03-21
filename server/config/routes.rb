@@ -15,6 +15,10 @@ Rails.application.routes.draw do
 
     resources :properties, only: [ :index, :show ]
 
-    resources :favourites, only: [ :index, :create, :destroy ]
+    resources :favourites, only: [ :index, :create, :destroy ] do
+      member do
+        patch :toggle_like
+      end
+    end
   end
 end

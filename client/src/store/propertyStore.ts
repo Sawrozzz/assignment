@@ -17,6 +17,7 @@ export type Favourite = {
   id: number;
   user_id: number;
   property_id: number;
+  is_liked: boolean;
   created_at: string;
   updated_at: string;
   property: Property;
@@ -25,24 +26,29 @@ export type Favourite = {
 type PropertyState = {
   properties: Property[];
   favourites: Favourite[];
+  token: string | null;
   loading: boolean;
   error: string | null;
   getAllProperties: () => Promise<void>;
   getFavouriteProperties: () => Promise<void>;
   addToFavourite: (propertyId: number) => Promise<void>;
+  removeFromFavourite: (favouriteId: number) => Promise<void>;
+  toogleLike: (favouriteId: number) => Promise<void>;
 };
 
-export const usePropertyStore = create<PropertyState>((set) => ({
+export const usePropertyStore = create<PropertyState>((set, get) => ({
   properties: [],
   favourites: [],
   loading: false,
   error: null,
 
+  token: localStorage.getItem("token"),
+
   getAllProperties: async () => {
-    const token = localStorage.getItem("token");
+    const { token } = get();
 
     if (!token) {
-      set({ error: "You are not authorized yet. Login first" });
+      set({ error: "Unauthorized. Please login." });
       return;
     }
     try {
@@ -66,7 +72,7 @@ export const usePropertyStore = create<PropertyState>((set) => ({
     }
   },
   getFavouriteProperties: async () => {
-    const token = localStorage.getItem("token");
+    const { token } = get();
     if (!token) {
       set({ error: "No auth token found" });
       return;
@@ -114,6 +120,59 @@ export const usePropertyStore = create<PropertyState>((set) => ({
         err.message ||
         "Failed to add favourite";
       set({ error: message, loading: false });
+    }
+  },
+  removeFromFavourite: async (favouriteId: number) => {
+    const { token, favourites } = get();
+    if (!token) return;
+    const updatedFavourites = favourites.filter(
+      (fav) => fav.id !== favouriteId,
+    );
+    set({ favourites: updatedFavourites });
+    const previousFavourites = [...favourites];
+
+    try {
+      await axios.delete(`${baseUrl}/favourites/${favouriteId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (err: any) {
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        err.message ||
+        "Failed to add favourite";
+      set({ favourites: previousFavourites, error: message, loading: false });
+    }
+  },
+  toogleLike: async (favouriteId: number) => {
+    const { token, favourites } = get();
+
+    if (!token) return;
+
+    const prevFavourites = [...favourites];
+
+    const updated = favourites.map((f) =>
+      f.id === favouriteId ? { ...f, is_liked: !f.is_liked } : f,
+    );
+    set({ favourites: updated });
+
+    try {
+      await axios.patch(
+        `${baseUrl}/favourites/${favouriteId}/toggle_like`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+    } catch (err: any) {
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        err.message ||
+        "Failed to add favourite";
+      set({ favourites: prevFavourites, error: message, loading: false });
     }
   },
 }));

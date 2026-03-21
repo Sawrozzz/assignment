@@ -31,7 +31,7 @@ export default function DashboardPage() {
       {properties.map((property) => (
         <div
           key={property.id}
-          className="relative h-64 rounded-lg shadow-lg overflow-hidden group cursor-pointer"
+          className="relative h-64 rounded-lg shadow-lg overflow-hidden group"
         >
           <img
             src="building.png"
@@ -48,7 +48,7 @@ export default function DashboardPage() {
             <p className="text-sm">{property.location}</p>
             <button
               onClick={() => handleAddToFavourite(property)}
-              className="mt-2 px-3 py-1 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl transition duration-200 text-sm"
+              className="mt-2 px-3 py-1 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl transition duration-200 text-sm cursor-pointer"
             >
               Add to Favourite
             </button>

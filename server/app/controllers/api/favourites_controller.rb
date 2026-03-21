@@ -33,5 +33,15 @@ module Api
           render json: { error: "Property not found" }, status: :not_found
         end
       end
+
+      def toggle_like
+        favourite = @current_user.favourites.find_by(id: params[:id])
+
+        if favourite.toggle_like!
+          render json: favourite, status: :ok
+        else
+          render json: { errors: "Unable to toggle like" }, status: :unprocessable_entity
+        end
+      end
     end
 end

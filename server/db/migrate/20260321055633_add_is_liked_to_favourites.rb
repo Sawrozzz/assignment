@@ -1,0 +1,5 @@
+class AddIsLikedToFavourites < ActiveRecord::Migration[7.2]
+  def change
+    add_column :favourites, :is_liked, :boolean, default: false, null: false
+  end
+end
