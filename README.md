@@ -23,6 +23,6 @@ Ensure you have the following installed on your **Linux** environment:
 1. **Navigate to the server directory:**
    ```bash
    cd server
+2. **Install Dependencies:**
+   ```bash
    bundle install
-   ```   
-
