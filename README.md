@@ -47,7 +47,7 @@ Ensure you have the following installed on your **Linux** environment:
     email: "test@buyer.com",
     password: "Test@123",
 
- You can use this credential for login process.[NOTE: WE DO HAVE USER REGISTRATION FUNCTIONALITY AS WELL BUT ONLY FROM SERVER SIDE, YOU CAN REGISTER ANY USER FROM POSTMAN OR FROM CONSOLE OR POSTMAN.]
+ You can use this credential for login process.[NOTE: YOU CAN EVEN CREATE/REGISTER USER AND LOGIN WITH THAT CREDENTIAL AS WELL.]
 
 
 ##  Frontend Setup (React + Vite)
@@ -70,7 +70,7 @@ Ensure you have the following installed on your **Linux** environment:
 ### Working flow of this system
 
 1. Initially you will redirect to login page.
-2. Enter credential (email, password) from above and enter Login.
+2. Enter credential (email, password) from above (or register new user) and enter Login.
 3. You will redirect to dashboard page. Their you will see list/card of properties with "Add to Favourite" Button.
 4. On click on that button the properties added to your favourite list.
 5. On the the top, you will see navbar from where you can navigate.
@@ -78,15 +78,7 @@ Ensure you have the following installed on your **Linux** environment:
 7. You can click on Like button to Like and Dislike the item.
 8. You can can also remove the item from your favourite list by clicking on the TrashButton on that item.
 9. You can logout from your account from the logo image on the top right of navbar.
-10. You can login any account from login page. Just you have to crate an account first which you can do from rails console or from postman with given route
- ```bash
-   http://localhost:3000/api/user/signup ```
-   with these request body
-   ```bash
-   email: <any email>
-   name: <any name>
-   password: <any password>
-   ```
+
 
 NOTE: YOU CAN CHECK THE UI'S ON README.MD FILE OF CLIENT FOLDER.
 
