@@ -16,6 +16,7 @@ type AuthState = {
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
+  register: (name: string, email: string, password: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 };
@@ -26,6 +27,33 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: !!localStorage.getItem("token"),
   loading: false,
   error: null,
+  register: async (name, email, password) => {
+    try {
+      set({ loading: true, error: null });
+
+      await axios.post(`${baseUrl}/user/signup`, {
+        name,
+        email,
+        password,
+      });
+
+      set({
+        loading: false,
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        err.message ||
+        "Registration failed";
+      set({
+        error: message,
+        loading: false,
+      });
+      throw new Error(message);
+    }
+  },
   login: async (email, password) => {
     try {
       set({ loading: true, error: null });
@@ -44,13 +72,12 @@ export const useAuthStore = create<AuthState>((set) => ({
         isAuthenticated: true,
         loading: false,
       });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-
       const message =
         err.response?.data?.message ||
-        err.response?.data?.error || 
-        err.message || 
+        err.response?.data?.error ||
+        err.message ||
         "Login failed";
       set({
         error: message,

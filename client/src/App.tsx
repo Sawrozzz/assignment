@@ -7,6 +7,7 @@ import { useAuthStore } from "./store/authStore";
 
 const DashboardPage = lazy(() => import("./pages/dashboard"));
 const LoginPage = lazy(() => import("./pages/login"));
+const RegisterPage = lazy(() => import("./pages/register"));
 const FavouritePage = lazy(() => import("./pages/favourite"));
 const PageNotFoundPage = lazy(() => import("./pages/pageNotFound"));
 
@@ -36,6 +37,7 @@ export default function App() {
               )
             }
           />
+          <Route path="/register" element={<RegisterPage />}></Route>
           {isAuthenticated && (
             <Route element={<ProtectedNavs />}>
               <Route path="/dashboard" element={<DashboardPage />} />

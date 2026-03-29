@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/authStore";
 
-export default function LoginPage() {
-  const login = useAuthStore((state) => state.login);
+export default function RegisterPage() {
+  const register = useAuthStore((state) => state.register);
   const loading = useAuthStore((state) => state.loading);
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,10 +17,10 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      await login(email, password);
-      toast.success("Login successful!");
-      navigate("/dashboard");
-    } catch (err:any) {
+      await register(name, email, password);
+      toast.success("Account created successfull. You can login now.");
+      navigate("/login");
+    } catch (err: any) {
       toast.error(err.message);
     }
   };
@@ -34,7 +35,8 @@ export default function LoginPage() {
           <h1 className="text-6xl font-bold">Buy Any Property You Want</h1>
 
           <p className="flex text-center flex-wrap text-lg text-emerald-100 max-w-md">
-            Login to you account to find beautifull builiding waiting for you.
+            Create an account, login and explore beautifull properties through
+            our protal.
           </p>
         </div>
       </div>
@@ -42,10 +44,23 @@ export default function LoginPage() {
       <div className="flex w-full md:w-1/2 items-center justify-center bg-gray-50 px-6">
         <div className="w-full max-w-md bg-white p-10 rounded-2xl ">
           <h2 className="text-2xl font-semibold text-gray-800 mb-8 text-center">
-            Sign in to your account
+            Create New Account
           </h2>
 
           <form className="space-y-6" onSubmit={handleOnSubmit}>
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-2">
+                Full Name
+              </label>
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-3 border border-emerald-700 rounded-lg"
+                required
+              />
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-2">
                 Email
@@ -83,10 +98,8 @@ export default function LoginPage() {
             </button>
           </form>
           <div className="mt-4">
-            <a
-            href="/register" 
-            className="text-sm text-blue-500 cursor-pointer">
-             Create New Account Here
+            <a href="/login" className="text-sm text-blue-500 cursor-pointer">
+              Already Have An Account?
             </a>
           </div>
         </div>
